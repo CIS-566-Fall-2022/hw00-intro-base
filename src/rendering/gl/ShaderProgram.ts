@@ -90,7 +90,7 @@ class ShaderProgram {
   setTime(time: number) {
     this.use();
     if (this.unifTime !== -1) {
-      gl.uniform1i(this.unifTime, time);
+      gl.uniform1f(this.unifTime, time);
     }
   }
 

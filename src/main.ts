@@ -13,7 +13,7 @@ import Cube from './geometry/Cube';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
-  color: [255, 0, 0],
+  color: [255, 255, 255],
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
@@ -72,6 +72,8 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  renderer.setUniformColor(controls.color);
+
   // This function will be called every frame
   function tick() {
     camera.update();
@@ -91,9 +93,9 @@ function main() {
     }
 
     renderer.render(camera, lambert, [
-      // icosphere,
+      icosphere,
       // square,
-      cube,
+      // cube,
     ]);
     stats.end();
 

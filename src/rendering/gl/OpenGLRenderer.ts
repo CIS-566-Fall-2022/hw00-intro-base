@@ -6,7 +6,7 @@ import ShaderProgram from './ShaderProgram';
 
 // In this file, `gl` is accessible because it is imported above
 class OpenGLRenderer {
-  uniformColor: vec4 = vec4.fromValues(1, 0, 0, 1);
+  uniformColor: vec4 = vec4.fromValues(0, 0, 0, 1);
   time: number = 0;
   prevTime: number = new Date().getTime();
 
