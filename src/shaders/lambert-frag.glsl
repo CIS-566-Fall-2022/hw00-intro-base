@@ -87,14 +87,12 @@ WorleyInfo worley(vec3 uv) {
 struct Shader {
     vec3 diffuseColor;
     vec3 emissionColor;
-    float emissionStrength;
 };
 
 Shader mixShaders(Shader a, Shader b, float x) {
     Shader mixShader;
     mixShader.diffuseColor = mix(a.diffuseColor, b.diffuseColor, x);
     mixShader.emissionColor = mix(a.emissionColor, b.emissionColor, x);
-    mixShader.emissionStrength = mix(a.emissionStrength, b.emissionStrength, x);
     return mixShader;
 }
 
@@ -108,16 +106,15 @@ void main()
 
     Shader swirlyShader;
     swirlyShader.diffuseColor = swirlyWorley.color * fs_Col.rgb;
-    swirlyShader.emissionColor = swirlyWorley.color;
-    swirlyShader.emissionStrength = smoothstep(0.6, 0.1, swirlyWorley.dist) * 0.75;
+    float swirlyEmissionStrength = smoothstep(0.6, 0.1, swirlyWorley.dist) * 0.75;
+    swirlyShader.emissionColor = swirlyWorley.color * swirlyEmissionStrength;
 
     WorleyInfo circlesWorley1 = worley(fs_Pos.xyz * 10. + vec3(float(u_Time) / 1200.f));
     WorleyInfo circlesWorley2 = worley(vec3(circlesWorley1.dist * 1.5));
 
     Shader circlesShader;
     circlesShader.diffuseColor = vec3(circlesWorley2.dist * 2.0);
-    circlesShader.emissionColor = circlesShader.diffuseColor * fs_Col.rgb;
-    circlesShader.emissionStrength = 0.2;
+    circlesShader.emissionColor = circlesShader.diffuseColor * fs_Col.rgb * 0.2;
 
     float mixFactor = (perlin(vec4(fs_Pos.xyz, 0)) + 1.0) / 2.0;
     mixFactor = smoothstep(0.4, 0.8, mixFactor);
@@ -131,7 +128,7 @@ void main()
     float lightIntensity = diffuseTerm + ambientTerm;
 
     vec3 lambertianColor = mixShader.diffuseColor.rgb * lightIntensity;
-    vec3 emissionColor = mixShader.emissionColor * mixShader.emissionStrength;
+    vec3 emissionColor = mixShader.emissionColor;
 
     out_Col = vec4(lambertianColor + emissionColor, 1);
 }

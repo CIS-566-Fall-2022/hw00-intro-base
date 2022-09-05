@@ -1,7 +1,7 @@
 #version 300 es
 
-// #define DISPLACEMENT
-float displacementScale = 0.4;
+#define DISPLACEMENT
+#define DISPLACEMENT_SCALE 0.4
 
 //This is a vertex shader. While it is called a "shader" due to outdated conventions, this file
 //is used to apply matrix transformations to the arrays of vertex data passed to it.
@@ -64,7 +64,7 @@ void main()
     displacedPos += displacementNormal * vs_Nor * 0.2;
 
     float displacementFactor = abs(fract(float(u_Time) / 7682.39) * 2.0 - 1.0);
-    displacementFactor = smoothstep(0., 1., displacementFactor) * displacementScale;
+    displacementFactor = smoothstep(0., 1., displacementFactor) * DISPLACEMENT_SCALE;
     displacedPos = mix(modelposition, displacedPos, displacementFactor);
 #endif
 
