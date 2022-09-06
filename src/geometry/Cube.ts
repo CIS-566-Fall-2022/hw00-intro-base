@@ -6,11 +6,11 @@ class Cube extends Drawable {
   indices: Uint32Array;
   positions: Float32Array;
   normals: Float32Array;
-  center: vec4;
+  center: vec3;
 
   constructor(center: vec3 = vec3.fromValues(0, 0, 0)) {
     super();
-    this.center = vec4.fromValues(center[0], center[1], center[2], 1);
+    this.center = center;
   }
 
   create() {
@@ -88,7 +88,9 @@ class Cube extends Drawable {
     ]);
 
     for (let i = 0; i < this.positions.length; i++) {
-      this.positions[i] += this.center[i % 4];
+      if (i % 4 != 3) {
+        this.positions[i] += this.center[i % 4];
+      }
     }
 
     this.generateIdx();
