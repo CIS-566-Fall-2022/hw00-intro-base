@@ -7,10 +7,12 @@ class Cube extends Drawable {
   positions: Float32Array;
   normals: Float32Array;
   center: vec3;
+  sideLength: number;
 
-  constructor(center: vec3 = vec3.fromValues(0, 0, 0)) {
+  constructor(center: vec3 = vec3.fromValues(0, 0, 0), sideLength: number = 2.0) {
     super();
     this.center = center;
+    this.sideLength = sideLength;
   }
 
   create() {
@@ -89,6 +91,7 @@ class Cube extends Drawable {
 
     for (let i = 0; i < this.positions.length; i++) {
       if (i % 4 != 3) {
+        this.positions[i] *= this.sideLength / 2.0;
         this.positions[i] += this.center[i % 4];
       }
     }

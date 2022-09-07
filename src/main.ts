@@ -20,21 +20,24 @@ const controls = {
 
 let icosphere: Icosphere;
 let square: Square;
-let cube: Cube;
+let cube1: Cube;
+let cube2: Cube;
 let grid: Grid;
 
 let prevTesselations: number = controls.tesselations;
 let prevColor = controls.color;
 
 function loadScene() {
-  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
+  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1.2, controls.tesselations);
   icosphere.create();
 
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
 
-  cube = new Cube(vec3.fromValues(0, 0, 0));
-  cube.create();
+  cube1 = new Cube(vec3.fromValues(2, 0, 0), 0.8);
+  cube1.create();
+  cube2 = new Cube(vec3.fromValues(-2, 0, 0), 0.8);
+  cube2.create();
 
   grid = new Grid(vec3.fromValues(0, 0, 0), 5.0, 50);
   grid.create();
@@ -100,9 +103,10 @@ function main() {
     }
 
     renderer.render(camera, lambert, [
-      // icosphere,
+      icosphere,
       // square,
-      // cube,
+      cube1,
+      cube2,
       grid,
     ]);
     stats.end();

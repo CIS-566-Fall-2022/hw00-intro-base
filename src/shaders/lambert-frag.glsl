@@ -1,6 +1,6 @@
 #version 300 es
 
-#define PASSTHROUGH
+// #define PASSTHROUGH
 
 precision highp float;
 
@@ -97,11 +97,9 @@ void main()
     float lightIntensity = diffuseTerm + ambientTerm;
     out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
 #else
-    float time = float(u_Time);
-
-    float perlin1 = perlin(vec4(fs_Pos.xyz, time / 1000.f));
-    float perlin2 = perlin(vec4(fs_Pos.xyz * 2.f, time / 2000.f));
-    float perlin3 = perlin(vec4(fs_Pos.xyz * 4.f, time / 4000.f));
+    float perlin1 = perlin(vec4(fs_Pos.xyz, u_Time / 1000.f));
+    float perlin2 = perlin(vec4(fs_Pos.xyz * 2.f, u_Time / 2000.f));
+    float perlin3 = perlin(vec4(fs_Pos.xyz * 4.f, u_Time / 4000.f));
 
     WorleyInfo swirlyWorley = worley(fs_Pos.xyz + perlin1 + perlin2 + perlin3);
 
@@ -109,11 +107,11 @@ void main()
     float swirlyEmissionStrength = smoothstep(0.6, 0.1, swirlyWorley.dist) * 0.75;
     vec3 swirlyEmissionColor = swirlyWorley.color * swirlyEmissionStrength;
 
-    WorleyInfo circlesWorley1 = worley(fs_Pos.xyz * 10. + vec3(time / 1200.f));
+    WorleyInfo circlesWorley1 = worley(fs_Pos.xyz * 10. + vec3(u_Time / 1200.f));
     WorleyInfo circlesWorley2 = worley(vec3(circlesWorley1.dist * 1.5));
 
-    vec3 circlesDiffuseColor = vec3(circlesWorley2.dist * 2.0);
-    vec3 circlesEmissionColor = circlesDiffuseColor * fs_Col.rgb * 0.2;
+    vec3 circlesDiffuseColor = vec3(clamp(circlesWorley2.dist * 2.0, 0., 1.));
+    vec3 circlesEmissionColor = circlesDiffuseColor * fs_Col.rgb * 0.3;
 
     float mixFactor = (perlin(vec4(fs_Pos.xyz, 0)) + 1.0) / 2.0;
     mixFactor = smoothstep(0.4, 0.8, mixFactor);
