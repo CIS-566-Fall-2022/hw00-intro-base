@@ -27,7 +27,7 @@ class Grid extends Drawable {
     this.normals = new Float32Array(totalVerts * 4);
     this.positions = new Float32Array(totalVerts * 4);
     
-    let dx = 1.0 / vertsPerSide * this.sideLength;
+    let edgeLength = 1.0 / this.resolution * this.sideLength;
     for (let i = 0; i < totalVerts; ++i) {
       let j = i * 4;
 
@@ -36,9 +36,9 @@ class Grid extends Drawable {
       this.normals[j + 2] = 0;
       this.normals[j + 3] = 0;
 
-      this.positions[j] = corner[0] + ((i % vertsPerSide) * dx);
+      this.positions[j] = corner[0] + ((i % vertsPerSide) * edgeLength);
       this.positions[j + 1] = corner[1];
-      this.positions[j + 2] = corner[2] + ((i / vertsPerSide) * dx);
+      this.positions[j + 2] = corner[2] + ((i / vertsPerSide) * edgeLength);
       this.positions[j + 3] = 1;
     }
 
