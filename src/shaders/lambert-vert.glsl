@@ -1,6 +1,7 @@
 #version 300 es
 
-#define DISPLACEMENT
+#define PASSTHROUGH
+
 #define DISPLACEMENT_SCALE 0.4
 
 //This is a vertex shader. While it is called a "shader" due to outdated conventions, this file
@@ -54,7 +55,7 @@ void main()
 
     vec4 displacedPos = modelposition;
 
-#ifdef DISPLACEMENT
+#ifndef PASSTHROUGH
     displacedPos.y *= mix(0.1, 0.8, (cos(float(u_Time) / 500.0) + 1.0) / 2.0);
     displacedPos.x += sin(float(u_Time) / 250.0 + displacedPos.y);
     displacedPos.z += 2.0 * (sin(displacedPos.y) + cos(displacedPos.x));
