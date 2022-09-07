@@ -26,7 +26,6 @@ uniform float u_Time;
 
 void main()
 {
-
     fs_Col = u_Color;
 
     mat3 invTranspose = mat3(u_ModelInvTr);
