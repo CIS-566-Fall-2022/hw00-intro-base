@@ -25,7 +25,6 @@ let cube2: Cube;
 let grid: Grid;
 
 let prevTesselations: number = controls.tesselations;
-let prevColor = controls.color;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1.2, controls.tesselations);
@@ -55,8 +54,11 @@ function main() {
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
-  gui.addColor(controls, 'color');
   gui.add(controls, 'Load Scene');
+
+  gui.addColor(controls, 'color').onChange((newColor: number[]) => {
+    renderer.setUniformColor(newColor);
+  });
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -95,11 +97,6 @@ function main() {
       prevTesselations = controls.tesselations;
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
       icosphere.create();
-    }
-
-    if (controls.color != prevColor) {
-      prevColor = controls.color;
-      renderer.setUniformColor(controls.color);
     }
 
     renderer.render(camera, lambert, [
