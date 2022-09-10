@@ -19,8 +19,8 @@ const controls = {
   'Load Scene': loadScene, // A function pointer, essentially
   'Shader': 0,
   'Color': [ 0, 128, 255 ],
-  'Shaders': 'Lambert',
-
+  'Shaders': 'Transform',
+  'Noise Color': [ 255, 255, 255 ],
 };
 
 let icosphere: Icosphere;
@@ -28,6 +28,7 @@ let square: Square;
 let cube: Cube;
 let time: vec4 = vec4.fromValues(0, 0, 0, 0);
 let color: vec4; 
+let noiseColor: vec4; 
 
 let prevTesselations: number = 5;
 
@@ -56,7 +57,8 @@ function main() {
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
   gui.addColor(controls, 'Color');
-  gui.add(controls, 'Shader', 0, 1).step(1);
+  gui.addColor(controls, 'Noise Color');
+  // gui.add(controls, 'Shader', 0, 1).step(1);
   gui.add(controls, 'Shaders', [ 'Lambert', 'Perlin Noise', 'Transform' ] );
 
   // get canvas and webgl context
@@ -94,6 +96,8 @@ function main() {
   function tick() {
     time = vec4.fromValues(time[0] + 0.01,0,0,0);
     color = vec4.fromValues(controls.Color[0] /255, controls.Color[1] / 255, controls.Color[2] / 255, 1);
+    noiseColor = vec4.fromValues(controls['Noise Color'][0] /255, controls['Noise Color'][1] / 255, controls['Noise Color'][2] / 255, 1);
+
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
@@ -107,41 +111,24 @@ function main() {
     var shader;
     if(controls.Shaders == 'Lambert'){
       shader = lambert;
-      renderer.render(camera, time, color, shader, [
+      renderer.render(camera, time, color, noiseColor, shader, [
         cube,  icosphere,
       ]);
     }
     if(controls.Shaders == 'Perlin Noise'){
       shader = perlin;
-      renderer.render(camera, time, color, shader, [
+      renderer.render(camera, time, color, noiseColor, shader, [
         cube,  icosphere,
       ]);
+      
     }
     if(controls.Shaders == 'Transform'){
       shader = transform;
-      renderer.render(camera, time, color, shader, [
+      renderer.render(camera, time, color, noiseColor, shader, [
         cube,  
       ]);
     }
-    // renderer.render(camera, time, color, shader, [
-    //   cube,  
-    // ]);
 
-    // if(controls.Shader == 0){
-    //   renderer.render(camera, time, color, lambert, [
-    //     icosphere,      
-    //   ]);
-    //   renderer.render(camera, time, color, lambert, [
-    //     cube,
-    //   ]);
-    // }else {
-    //   renderer.render(camera, time, color, perlin, [
-    //     icosphere,      
-    //   ]);
-    //   renderer.render(camera, time, color, perlin, [
-    //     cube,
-    //   ]);
-    // }
 
     stats.end();
 

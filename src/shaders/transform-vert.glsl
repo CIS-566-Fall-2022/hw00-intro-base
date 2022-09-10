@@ -67,15 +67,9 @@ void main()
     // float interval = step(-1, 1, sin(u_Time.x * PI ));
 
     vec3 dispDir = normalize(vec3(vs_Pos));  // the direction of displacement
-    vec4 displacement = vec4(2.0f * dispDir - vec3(vs_Pos), 1);
-    float dispIncre = sin(u_Time.x * 4.0f) + 1.0f;
-    displacement *= dispIncre;
-
-    vec4 newPosition = vec4(vec3(displacement) * dispDir, 1);
-    newPosition += vec4(noise(vec3(newPosition)),
-                        noise(vec3(newPosition)),
-                        noise(vec3(newPosition)), 1);
-    vec4 new_vs_Pos = u_Model * (vs_Pos + displacement);
+    float delta = 1.0f + (sin(u_Time.x * 5.0f) + 1.0f) / 2.0f;
+    vec4 v = vec4(vec3(dispDir * 1.0f), 1);
+    vec4 pos = mix(vs_Pos, v, delta);
 
 
     mat3 invTranspose = mat3(u_ModelInvTr);
@@ -86,7 +80,7 @@ void main()
                                                             // the model matrix.
 
 
-    vec4 modelposition = u_Model * new_vs_Pos;   // Temporarily store the transformed vertex positions for use below
+    vec4 modelposition = u_Model * pos;   // Temporarily store the transformed vertex positions for use below
 
     fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
 

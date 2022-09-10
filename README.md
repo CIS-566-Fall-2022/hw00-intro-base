@@ -1,4 +1,19 @@
 # HW 0: Intro to Javascript and WebGL
+### Yilin Liu
+[Lieve Demo](https://bigfranklin1.github.io/CIS566-hw00-intro-base/)
+
+## Screenshots
+
+### Lambert
+I added a color palette to change the diffuse color.
+![image info](./images/lambert.png)
+### Perlin Noise
+I implemented a 3D Perlin Noise based on [code](https://www.shadertoy.com/view/ttsBWl) from shadertoy. 
+![image info](./images/perlin_noise.gif)
+
+### Custom Vertex Shader
+I added a custom vertex shader that uses a sin function to modify cube's vertices
+![image info](./images/cube_transform.gif)
 
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">

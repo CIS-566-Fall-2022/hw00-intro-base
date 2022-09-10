@@ -11,6 +11,7 @@
 // position, light position, and vertex color.
 precision highp float;
 
+uniform vec4 u_NoiseColor; // The color with which to render this instance of geometry.
 uniform vec4 u_Color; // The color with which to render this instance of geometry.
 uniform vec4 u_Time;
 
@@ -131,7 +132,7 @@ void main()
         vec4 lightColor = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
 
         // vec4 color = mix(lightColor.rgb, u_Color.rgb, fbm(fs_Pos.xyz));
-        vec3 color = vec3(1, 1, 1);
+        vec3 color = u_NoiseColor.xyz;
         
 
 
