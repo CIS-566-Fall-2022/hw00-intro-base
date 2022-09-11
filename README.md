@@ -1,8 +1,12 @@
 # Project Description
 
+[Live demo](https://adityagupta1.github.io/hw00-intro-base/)
+
 In addition to the default icosphere, I've added two cubes and a grid to make a more interesting scene. Each object has the same shader, which includes a vertex shader that creates ripples with trigonometric functions and a fragment shader that mixes between warped patches of color and circular bubble-like patterns. The strength of the vertex displacement is modulated by another trigonometric function so you can see the mesh with full displacement and with no displacement. Both the vertex displacement and fragment color are also affected by time.
 
 Additionally, the underside of the mesh shows some light emission separate from the normal Lambertian reflection. The color picker in the GUI also affects the overall color of the mesh, but some parts are affected more than others.
+
+The frame rate of the project isn't great due to the many different noise functions used, but I think it looks really cool.
 
 ### No displacement
 <img src="screenshots/no_displacement.png" width=500px />
