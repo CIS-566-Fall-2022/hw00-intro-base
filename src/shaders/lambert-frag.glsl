@@ -111,7 +111,7 @@ void main()
     WorleyInfo circlesWorley2 = worley(vec3(circlesWorley1.dist * 1.5));
 
     vec3 circlesDiffuseColor = vec3(clamp(circlesWorley2.dist * 2.0, 0., 1.));
-    vec3 circlesEmissionColor = circlesDiffuseColor * fs_Col.rgb * 0.35;
+    vec3 circlesEmissionColor = circlesDiffuseColor * fs_Col.rgb * 0.3;
 
     float mixFactor = (perlin(vec4(fs_Pos.xyz, 0)) + 1.0) / 2.0;
     mixFactor = smoothstep(0.4, 0.8, mixFactor);
