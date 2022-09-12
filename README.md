@@ -1,3 +1,17 @@
+# Project Description
+I added a fragment shader with FBM whose base color can be changed by a color gui. Here are some different colors:
+<img width="485" alt="Screen Shot 2022-09-12 at 12 21 27 PM" src="https://user-images.githubusercontent.com/25019996/189705670-22e61d6a-0306-4fb5-9136-bc622b69af91.png">
+<img width="483" alt="Screen Shot 2022-09-12 at 12 21 15 PM" src="https://user-images.githubusercontent.com/25019996/189705672-24b8c8e4-480a-4bb9-ab04-13dd7a9e47b3.png">
+<img width="447" alt="Screen Shot 2022-09-12 at 12 21 10 PM" src="https://user-images.githubusercontent.com/25019996/189705675-9f6f2c90-879b-4ef7-87a3-49b744727259.png">
+<img width="417" alt="Screen Shot 2022-09-12 at 12 20 59 PM" src="https://user-images.githubusercontent.com/25019996/189705677-18478053-628d-42cb-8575-fa6c29fb84c3.png">
+
+I also added a vertex shader that warps the geometry over time. I do this by deforming vertex position along one axis using a sin function that takes time and vextex position along another axis. For example, position on y drives deformation along x. This makes the cube warp different amongs along each axis, which gives funky shapes. I also clamp the amount of effect so the geometry never fully compresses along any axis. Here is the cube changing over time:
+
+
+https://user-images.githubusercontent.com/25019996/189706640-75d51531-318a-4b66-9dad-605a2bc3004f.mov
+
+Live demo: https://e-chou.github.io/hw00-intro-base/index.html
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
