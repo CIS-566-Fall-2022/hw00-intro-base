@@ -1,5 +1,17 @@
 # HW 0: Intro to Javascript and WebGL
 
+
+## Description
+- Implemented the fragment shader that based on Perlin3d
+- Implemented the vertex shader uses a trigonometric function to non-uniformly modify cube's vertex positions over time
+
+## LiveDemo
+https://yuz796.github.io/hw00-intro-base/
+![](1.png)
+![](2.png)
+
+
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
