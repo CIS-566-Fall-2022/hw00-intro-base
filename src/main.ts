@@ -14,9 +14,9 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
-  'color.r' : 1,
-  'color.g' : 0,
-  'color.b' : 0,
+  //'color.r' : 1,
+  //'color.g' : 0,
+  //'color.b' : 0,
   color : [1,0,0,1]
 };
 
@@ -48,9 +48,9 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
-  gui.add(controls, 'color.r', 0, 1).step(0.05);
-  gui.add(controls, 'color.g', 0, 1).step(0.05);
-  gui.add(controls, 'color.b', 0, 1).step(0.05);
+  //gui.add(controls, 'color.r', 0, 1).step(0.05);
+  //gui.add(controls, 'color.g', 0, 1).step(0.05);
+  //gui.add(controls, 'color.b', 0, 1).step(0.05);
   gui.addColor(controls, 'color');
 
   // get canvas and webgl context
