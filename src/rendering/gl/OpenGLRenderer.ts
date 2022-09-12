@@ -22,10 +22,11 @@ class OpenGLRenderer {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
-  render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>) {
+  render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>, col: number[]) {
     let model = mat4.create();
     let viewProj = mat4.create();
-    let color = vec4.fromValues(1, 0, 0, 1);
+    //let color = vec4.fromValues(1, 0, 0, 1);
+    let color = vec4.fromValues(col[0]/255, col[1]/255, col[2]/255, col[3]);
 
     mat4.identity(model);
     mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
