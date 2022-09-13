@@ -1,4 +1,4 @@
-import {vec3} from 'gl-matrix';
+import {vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
@@ -7,23 +7,32 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import Cube from './geometry/Cube';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
+  color: [ 0, 128, 255],
+  scale: 1.5,
+  persistence: 0.75,
+  displacement: 0.1,
+  frequency: 0.1,
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
-  square = new Square(vec3.fromValues(0, 0, 0));
-  square.create();
+  // square = new Square(vec3.fromValues(0, 0, 0));
+  // square.create();
+  cube = new Cube(vec3.fromValues(0,0,0));
+  cube.create();
 }
 
 function main() {
@@ -38,6 +47,13 @@ function main() {
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
+  gui.addColor(controls, "color");
+  const noise_gui = gui.addFolder("noise");
+  noise_gui.add(controls, 'persistence', 0, 1);
+  noise_gui.add(controls, 'scale', 0, 5);
+  const jitter_gui = gui.addFolder("jitter");
+  jitter_gui.add(controls, "displacement", 0, 1);
+  jitter_gui.add(controls, "frequency", 0, 2);
   gui.add(controls, 'Load Scene');
 
   // get canvas and webgl context
@@ -64,8 +80,16 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const custom = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
+  ])
+
+  var time = 0;
+
   // This function will be called every frame
   function tick() {
+    time++;
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
@@ -76,9 +100,17 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
+
+    custom.setNoise(controls.scale, controls.persistence);
+    custom.setGeometryColor(vec4.fromValues(
+      controls.color[0]/255., controls.color[1]/255., controls.color[2]/255., 1.0));  
+    custom.setJitter(controls.displacement, controls.frequency);
+    custom.setTime(time);
+
+    renderer.render(camera, custom, [
+      // icosphere,
       // square,
+      cube
     ]);
     stats.end();
 
