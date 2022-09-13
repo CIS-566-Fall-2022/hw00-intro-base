@@ -1,8 +1,9 @@
-import {vec3} from 'gl-matrix';
+import {vec3, vec4} from 'gl-matrix';
 const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
@@ -12,18 +13,30 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
+  color: [ 255, 0, 0, 255 ],
+  shader: 'Noise',
+  shape: 'Icosphere',
+  noiseScale: 1.0,
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
+let currentColor = vec4.fromValues(1, 0, 0, 1);
+let currentShader = 'Noise';
+let currentShape = 'Icosphere';
+let prevNoiseScale: number = 1.0;
+let time = 0;
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+  cube = new Cube(vec3.fromValues(0, 0, 0));
+  cube.create();
 }
 
 function main() {
@@ -38,6 +51,13 @@ function main() {
   // Add controls to the gui
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
+  gui.addColor(controls, 'color').onChange(function() { currentColor = vec4.fromValues(controls.color[0] / 255, 
+                                                                                       controls.color[1] / 255, 
+                                                                                       controls.color[2] / 255, 
+                                                                                       controls.color[3] / 255); });
+  gui.add(controls,'shader', ['Noise', 'Lambert']).onChange(function() { currentShader = controls.shader });
+  gui.add(controls,'shape', ['Icosphere', 'Cube', 'Square']).onChange(function() { currentShape = controls.shape });
+  gui.add(controls, 'noiseScale', 0.0, 1.0).step(0.1);
   gui.add(controls, 'Load Scene');
 
   // get canvas and webgl context
@@ -64,6 +84,13 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const noise = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/noise-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/noise-frag.glsl')),
+  ]);
+
+  noise.setNoiseScale(controls.noiseScale);
+
   // This function will be called every frame
   function tick() {
     camera.update();
@@ -76,10 +103,31 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
-      // square,
-    ]);
+    if (controls.noiseScale != prevNoiseScale)
+    {
+      prevNoiseScale = controls.noiseScale;
+      noise.setNoiseScale(controls.noiseScale);
+    }
+
+    let shader = lambert;
+    if (currentShader == 'Noise') {
+      shader = noise;
+    }
+
+    let shape = [];
+    if (currentShape == 'Icosphere') {
+      shape.push(icosphere);
+    }
+    else if (currentShape == 'Cube') {
+      shape.push(cube);
+    }
+    else if (currentShape == 'Square') {
+      shape.push(square);
+    }
+
+    time++;
+
+    renderer.render(camera, shader, currentColor, time, shape);
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame

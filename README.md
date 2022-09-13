@@ -1,5 +1,59 @@
 # HW 0: Intro to Javascript and WebGL
 
+# Noise-Based Fur Shader
+
+<p align="center">
+  <img src="images/fur.gif"> 
+</p>
+<p align="center">Icosphere with Tesselation Count of 8</p>
+
+For this assignment, I textured and deformed a cube using Fractal Brownian Motion (FBM). Additionally, I added extra GUI parameters to give the user more control over the visuals, noise, and shape.
+
+NOTE: For better visual results, the default shape is the `Icosphere`, however you can select `Cube` from the dropdown menu in the top right. Additionally, the `Cube` may be disjointed when `noiseScale` is `1`, but you can decrease this to `0` to see it in its normal state.
+
+### Parameters
+
+The user has control over these parameters:
+* Tesselations - for the icosphere, this controls the number of subdivisions (default: 5).
+* Color - the color of the shape. In the Noise shader, the user-defined color is interpolated with another color from a palette, so the final output color may be slightly different from the chosen color. 
+* Shader - Noise or Lambertian shader. 
+* Shape - Icosphere, Cube, and Sphere.
+* Noise Scale - controls how much influence you want the noise to have on the vertex displacement. 
+
+### Results
+
+To implement the cube, I created a `Cube` class that inherited from `Drawable` and filled in the `positions`, `normals`, and `indices` buffers with the appropriate values. There was a total of:
+* `36` indices - `3` vertices for `12` triangles
+* `24` normals - `4` normals times `6` faces
+* `24` positions - `4` positions times `6` faces
+
+![Lambertian cube](images/lambertCube.PNG)
+
+Rather than just have a Lambertian cube, I added a shader that incorporates FBM (Fractal Brownian Motion) into the cube color. FBM consists of summing several octaves of noise at various frequencies and amplitudes, which results in a more fine-detail and cloud-like texture as seen on the cube below.
+
+![Noise cube](images/noiseCube.PNG)
+
+For the vertex deformation, I added a non-uniform scale and rotation to create a sort of squash-and-stretch effect. I initially wanted to create a more fluid-like motion with the vertices, but since the cube had only 24 vertices to deform, the effect did not show up as intended. 
+
+The effect is more clearer when viewed on the icosphere:
+
+Tesselation 5: \
+![Icosphere Vertex Deformation 5](images/standardFur.PNG)
+
+Tesselation 8: \
+![Icosphere Vertex Deformation 8](images/betterFur.PNG)
+
+### Live Demo
+
+See it [here](https://meganr28.github.io/hw00-intro-base/)!
+
+### References
+
+* Inigo Quilez, [Color Palettes](https://iquilezles.org/articles/palettes/)
+* Inigo Quilez, [Domain Warping](https://iquilezles.org/articles/warp/)
+* UPenn CIS 560 and CIS 566 Course Notes
+
+## Assignment Details
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
