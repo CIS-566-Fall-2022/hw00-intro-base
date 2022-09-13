@@ -1,11 +1,30 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Procedural Terrain Generator and Explorer
+
+PLAY AROUND WITH IT AT [THIS](https://nicholasmoon.github.io/hw00-intro-base/) SITE :O
+
+This project is a procedural terrain generator that creates infinite amounts of new terrain based on
+a number of parameters settable by the user. The terrain is rendered using a 100x100 cube grid. It uses
+Fractal Brownian Motion to determine things like color, terrain height, and other factors.
+
+I plan to implement other noise functions, like worley and perlin, to generate fun terrain, but didn't have the time yet.
+
+![](images/proj_gif.gif)
+
+![](images/cap0.PNG)
+
+![](images/cap1.PNG)
+
+![](images/cap2.PNG)
+
+## Objective
+
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>
 <p align="center">(source: Ken Perlin)</p>
 
-## Objective
 - Check that the tools and build configuration we will be using for the class works.
 - Start learning Typescript and WebGL2
 - Practice implementing noise
