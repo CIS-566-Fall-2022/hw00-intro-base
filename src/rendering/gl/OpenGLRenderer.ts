@@ -6,6 +6,7 @@ import ShaderProgram from './ShaderProgram';
 
 // In this file, `gl` is accessible because it is imported above
 class OpenGLRenderer {
+  flip = 0;
   constructor(public canvas: HTMLCanvasElement) {
   }
 
@@ -25,13 +26,17 @@ class OpenGLRenderer {
   render(camera: Camera, prog: ShaderProgram, drawables: Array<Drawable>) {
     let model = mat4.create();
     let viewProj = mat4.create();
-    let color = vec4.fromValues(1, 0, 0, 1);
-
+    if(!this.flip){
+      let color = vec4.fromValues(1, 0, 0, 1);
+      prog.setGeometryColor(color);
+      this.flip = 1;
+    }
+    
     mat4.identity(model);
     mat4.multiply(viewProj, camera.projectionMatrix, camera.viewMatrix);
     prog.setModelMatrix(model);
     prog.setViewProjMatrix(viewProj);
-    prog.setGeometryColor(color);
+    
 
     for (let drawable of drawables) {
       prog.draw(drawable);
