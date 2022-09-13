@@ -18,6 +18,8 @@ uniform mat4 u_ModelInvTr;  // The inverse transpose of the model matrix.
 uniform mat4 u_ViewProj;    // The matrix that defines the camera's transformation.
                             // We've written a static matrix for you to use for HW2,
                             // but in HW3 you'll have to generate one yourself
+
+uniform float u_Time;
 uniform vec4 u_CamPos;
 in vec4 vs_Pos;             // The array of vertex positions passed to the shader
 
@@ -27,10 +29,10 @@ in vec4 vs_Col;             // The array of vertex colors passed to the shader.
 out vec4 fs_Pos;
 out vec4 fs_Nor;            // The array of normals that has been transformed by u_ModelInvTr. This is implicitly passed to the fragment shader.
 out vec4 fs_LightVec;       // The direction in which our virtual light lies, relative to each vertex. This is implicitly passed to the fragment shader.
-out vec4 fs_Col;            // The color of each vertex. This is implicitly passed to the fragment shader.
 out vec3 fs_ViewVec;
-const vec4 lightPos = vec4(5, 0, 3, 1); //The position of our virtual light, which is used to compute the shading of
-                                        //the geometry in the fragment shader.
+out vec4 fs_Col;            // The color of each vertex. This is implicitly passed to the fragment shader.
+
+
 
 
 vec3 random3(vec3 p)
@@ -83,13 +85,14 @@ void main()
                                                             // model matrix. This is necessary to ensure the normals remain
                                                             // perpendicular to the surface after the surface is transformed by
                                                             // the model matrix.
-    
-    vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
-    modelposition += 0.5 * fs_Nor * perlinNoise3D(vec3(modelposition) * 3.0);
-    fs_Pos = modelposition;
-    fs_ViewVec = normalize(vec3(u_LightPos) - vec3(u_CamPos));
-    fs_LightVec = u_LightPos - modelposition;  // Compute the direction in which the light source lies
 
+ 
+    vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
+    modelposition = modelposition + fs_Nor * 0.05 * sin(vs_Pos.x * vs_Pos.y * 20.0 + 0.2 * u_Time / 50.0);
+    fs_Pos = modelposition;
+   
+    fs_LightVec = u_LightPos - modelposition;  // Compute the direction in which the light source lies
+    fs_ViewVec = normalize(vec3(u_LightPos) - vec3(u_CamPos));
     gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
                                              // used to render the final positions of the geometry's vertices
 }

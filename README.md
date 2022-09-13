@@ -1,5 +1,27 @@
 # HW 0: Intro to Javascript and WebGL
 
+## Demo
+
+https://mikolaslorant.github.io/hw00-intro-base/
+
+After implementing the cube I wanted to explore the idea of a sun going around the planet.
+The color picker changes the color of the water.
+I used three shaders: 
+* I modified the lambert shader to support blinn-phong, perlin noise with 3D input for the grass, sand and dirt. Also added snow based on the height. 
+* Added a passthrough shader which isn't passthrough in nature. Uses a sine wave that changes with time to add movement to the water on the planet which is rendered as a transparent sphere. Also added mixed in white Perlin noise to the water.
+* Added a gradient shader used in CIS5600 to render the sun.
+
+![](screenshot1.png)
+
+I used the sun as the light source for the blinn phong.
+![](screenshot2.png)
+The sun rotates around with time. I know this isn't scientifically correct :)
+![](screenshot3.png)
+![](screenshot4.png)
+
+# Proof the cube works correctly
+
+![](screenshot5.png)  
 <p align="center">
   <img width="360" height="360" src="https://user-images.githubusercontent.com/1758825/132532354-e3a45402-e484-499e-bfa7-2d73b9f2c946.png">
 </p>

@@ -20,6 +20,7 @@ in vec4 fs_Nor;
 in vec4 fs_LightVec;
 in vec4 fs_Col;
 in vec3 fs_ViewVec;
+
 out vec4 out_Col; // This is the final output color that you will see on your
                   // screen for the pixel that is currently being processed.
 
@@ -71,39 +72,16 @@ void main()
 {
         // Material base color (before shading)
         vec4 diffuseColor = u_Color;
-        //perlinNoise3D(vec3(0,0,1)));
-        vec3 black = vec3(0,0,0);
-        vec3 grid = vec3(0,1,0);
-        float distanceToCore = length(fs_Pos);
-        float noise = perlinNoise3D(vec3(fs_Pos) * 40.0);
-        float noisetwo = perlinNoise3D(vec3(fs_Pos) * 100.0);
-        float noisethree = perlinNoise3D(vec3(fs_Pos) * 90.0);
-        diffuseColor = mix(vec4(0,0.8,0.5,1), vec4(0.2, 0.05, 0, 1), noise); 
-        if (distanceToCore > 1.52)
-        {
-            diffuseColor = mix(diffuseColor, vec4(1), clamp(distanceToCore - 0.3, 0.0, 1.0));
-        }
-        if (distanceToCore < 1.45)
-        {
-             diffuseColor = mix(vec4(0.76,0.6,0.5,1), vec4(0.8, 0.5, 0, 1), clamp(noisethree, 0.0, 1.0)); 
-        }
-        if (distanceToCore < 1.4)
-        {
-             diffuseColor = mix(vec4(0.76,0.5,0.5,1), vec4(0.5, 0.25, 0, 1), noisetwo); 
-        }
-        
-       
-        
+        float noise = perlinNoise3D(vec3(fs_Pos) * 25.0);
+        diffuseColor = mix(u_Color, vec4(1, 1, 1, 1), noise); 
         // Calculate the diffuse term for Lambert shading
         float diffuseTerm = dot(normalize(fs_Nor), normalize(fs_LightVec));
         // Avoid negative lighting values
-        // diffuseTerm = clamp(diffuseTerm, 0, 1);
-        
-        // Copied Lambert shader
-        float ambientTerm = 0.2;
-        float exponent = 1.0;
+        float exponent = 5.0;
         float specularIntensity = max(pow(dot(normalize((vec3(fs_LightVec) + vec3(fs_ViewVec)) / 2.0), normalize(vec3(fs_Nor))), exponent), 0.0);
-        float lightIntensity = diffuseTerm + ambientTerm + specularIntensity;   //Add a small float value to the color multiplier
+        float ambientTerm = 0.2;
+
+        float lightIntensity = diffuseTerm + ambientTerm + specularIntensity ;   //Add a small float value to the color multiplier
                                                             //to simulate ambient lighting. This ensures that faces that are not
                                                             //lit by our point light are not completely black.
 

@@ -28,9 +28,8 @@ out vec4 fs_Pos;
 out vec4 fs_Nor;            // The array of normals that has been transformed by u_ModelInvTr. This is implicitly passed to the fragment shader.
 out vec4 fs_LightVec;       // The direction in which our virtual light lies, relative to each vertex. This is implicitly passed to the fragment shader.
 out vec4 fs_Col;            // The color of each vertex. This is implicitly passed to the fragment shader.
-out vec3 fs_ViewVec;
-const vec4 lightPos = vec4(5, 0, 3, 1); //The position of our virtual light, which is used to compute the shading of
-                                        //the geometry in the fragment shader.
+
+
 
 
 vec3 random3(vec3 p)
@@ -83,11 +82,11 @@ void main()
                                                             // model matrix. This is necessary to ensure the normals remain
                                                             // perpendicular to the surface after the surface is transformed by
                                                             // the model matrix.
-    
+
+ 
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
-    modelposition += 0.5 * fs_Nor * perlinNoise3D(vec3(modelposition) * 3.0);
     fs_Pos = modelposition;
-    fs_ViewVec = normalize(vec3(u_LightPos) - vec3(u_CamPos));
+    
     fs_LightVec = u_LightPos - modelposition;  // Compute the direction in which the light source lies
 
     gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
