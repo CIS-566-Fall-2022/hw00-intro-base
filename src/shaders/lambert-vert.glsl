@@ -53,7 +53,7 @@ void main()
 #endif
 
     vec4 modelPosition = u_Model * displacedPos;
-    fs_LightVec = lightPos - displacedPos;
-    fs_Pos = displacedPos;
-    gl_Position = u_ViewProj * displacedPos;
+    fs_LightVec = lightPos - modelPosition;
+    fs_Pos = modelPosition;
+    gl_Position = u_ViewProj * modelPosition;
 }
