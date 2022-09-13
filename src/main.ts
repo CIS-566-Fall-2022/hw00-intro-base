@@ -7,23 +7,39 @@ import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
 import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
+import Cube from './geometry/Cube';
+import Grid from './geometry/Grid';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
 const controls = {
   tesselations: 5,
+  color: [255, 255, 255],
   'Load Scene': loadScene, // A function pointer, essentially
 };
 
 let icosphere: Icosphere;
 let square: Square;
-let prevTesselations: number = 5;
+let cube1: Cube;
+let cube2: Cube;
+let grid: Grid;
+
+let prevTesselations: number = controls.tesselations;
 
 function loadScene() {
-  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
+  icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1.2, controls.tesselations);
   icosphere.create();
+
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+
+  cube1 = new Cube(vec3.fromValues(2, 0, 0), 0.8);
+  cube1.create();
+  cube2 = new Cube(vec3.fromValues(-2, 0, 0), 0.8);
+  cube2.create();
+
+  grid = new Grid(vec3.fromValues(0, 0, 0), 5.0, 50);
+  grid.create();
 }
 
 function main() {
@@ -39,6 +55,10 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+
+  gui.addColor(controls, 'color').onChange((newColor: number[]) => {
+    renderer.setUniformColor(newColor);
+  });
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -64,21 +84,27 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  renderer.setUniformColor(controls.color);
+
   // This function will be called every frame
   function tick() {
     camera.update();
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
-    if(controls.tesselations != prevTesselations)
-    {
+
+    if (controls.tesselations != prevTesselations) {
       prevTesselations = controls.tesselations;
-      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
+      icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
       icosphere.create();
     }
+
     renderer.render(camera, lambert, [
       icosphere,
       // square,
+      cube1,
+      cube2,
+      grid,
     ]);
     stats.end();
 

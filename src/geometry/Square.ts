@@ -6,25 +6,30 @@ class Square extends Drawable {
   indices: Uint32Array;
   positions: Float32Array;
   normals: Float32Array;
-  center: vec4;
+  center: vec3;
 
   constructor(center: vec3) {
     super(); // Call the constructor of the super class. This is required.
-    this.center = vec4.fromValues(center[0], center[1], center[2], 1);
+    this.center = center;
   }
 
   create() {
+    this.indices = new Uint32Array([0, 1, 2,
+                                    0, 2, 3]);
+    this.normals = new Float32Array([0, 0, 1, 0,
+                                    0, 0, 1, 0,
+                                    0, 0, 1, 0,
+                                    0, 0, 1, 0]);
+    this.positions = new Float32Array([-1, -1, 0, 1,
+                                      1, -1, 0, 1,
+                                      1, 1, 0, 1,
+                                      -1, 1, 0, 1]);
 
-  this.indices = new Uint32Array([0, 1, 2,
-                                  0, 2, 3]);
-  this.normals = new Float32Array([0, 0, 1, 0,
-                                   0, 0, 1, 0,
-                                   0, 0, 1, 0,
-                                   0, 0, 1, 0]);
-  this.positions = new Float32Array([-1, -1, 0, 1,
-                                     1, -1, 0, 1,
-                                     1, 1, 0, 1,
-                                     -1, 1, 0, 1]);
+    for (let i = 0; i < this.positions.length; i++) {
+      if (i % 4 != 3) {
+        this.positions[i] += this.center[i % 4];
+      }
+    }
 
     this.generateIdx();
     this.generatePos();
