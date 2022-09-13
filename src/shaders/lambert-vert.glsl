@@ -31,9 +31,7 @@ void main()
     mat3 invTranspose = mat3(u_ModelInvTr);
     fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);
 
-    vec4 modelPosition = u_Model * vs_Pos;
-
-    vec4 displacedPos = modelPosition;
+    vec4 displacedPos = vs_Pos;
 
 #ifndef PASSTHROUGH
     displacedPos.y *= mix(0.1, 0.8, (cos(u_Time / 500.0) + 1.0) / 2.0);
@@ -51,12 +49,11 @@ void main()
 
     float displacementFactor = abs(fract(u_Time / 7682.39) * 2.0 - 1.0);
     displacementFactor = smoothstep(0., 1., displacementFactor) * DISPLACEMENT_SCALE;
-    displacedPos = mix(modelPosition, displacedPos, displacementFactor);
+    displacedPos = mix(vs_Pos, displacedPos, displacementFactor);
 #endif
 
+    vec4 modelPosition = u_Model * displacedPos;
     fs_LightVec = lightPos - displacedPos;
-
     fs_Pos = displacedPos;
-
     gl_Position = u_ViewProj * displacedPos;
 }
