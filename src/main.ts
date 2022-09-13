@@ -17,7 +17,7 @@ const controls = {
   //'color.r' : 1,
   //'color.g' : 0,
   //'color.b' : 0,
-  color : [1,0,0,1]
+  color : [255,0,0,1]
 };
 
 let icosphere: Icosphere;
@@ -77,6 +77,11 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+  const customShader = new ShaderProgram([
+    new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
+    new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
+  ]);
+
   // This function will be called every frame
   function tick() {
     camera.update();
@@ -91,7 +96,10 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
+    renderer.render(camera, 
+      //lambert, 
+      customShader,
+    [
       icosphere,
       // square,
       // cube
