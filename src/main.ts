@@ -3,6 +3,7 @@ const Stats = require('stats-js');
 import * as DAT from 'dat.gui';
 import Icosphere from './geometry/Icosphere';
 import Square from './geometry/Square';
+import Cube from './geometry/Cube';
 import OpenGLRenderer from './rendering/gl/OpenGLRenderer';
 import Camera from './Camera';
 import {setGL} from './globals';
@@ -13,17 +14,70 @@ import ShaderProgram, {Shader} from './rendering/gl/ShaderProgram';
 const controls = {
   tesselations: 5,
   'Load Scene': loadScene, // A function pointer, essentially
+  R: 1.0,
+  G: 0.0,
+  B: 0.0,
+  A: 1.0,
+  'Lambert': changeToLambert,
+  'Perlin': changeToPerlin,
+  'Worley': changeToWorley,
+  'Custom': changeToCustom,
+  'Regular': changeToRegular,
+  'Expand': changeToExpand,
+  'Collapse': changeToCollapse,
+  'Distort':changeToDistort,
 };
 
 let icosphere: Icosphere;
 let square: Square;
+let cube: Cube;
 let prevTesselations: number = 5;
+
+var vertShader = require('./shaders/lambert-vert.glsl');
+var fragShader = require('./shaders/lambert-frag.glsl');
+function changeToLambert()
+{
+  fragShader = require('./shaders/lambert-frag.glsl');
+}
+function changeToPerlin()
+{
+  fragShader = require('./shaders/perlin-frag.glsl');
+}
+function changeToWorley()
+{
+  fragShader = require('./shaders/worley-frag.glsl');
+}
+function changeToCustom()
+{
+  fragShader = require('./shaders/custom-frag.glsl');
+}
+function changeToRegular()
+{
+  vertShader = require('./shaders/lambert-vert.glsl');
+}
+function changeToExpand()
+{
+  vertShader = require('./shaders/expand-vert.glsl');
+}
+function changeToCollapse()
+{
+  vertShader = require('./shaders/collapse-vert.glsl');
+}
+function changeToDistort()
+{
+  vertShader = require('./shaders/distort-vert.glsl');
+}
+var prevFragShader = fragShader;
+var prevVertShader = vertShader;
+
 
 function loadScene() {
   icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, controls.tesselations);
   icosphere.create();
   square = new Square(vec3.fromValues(0, 0, 0));
   square.create();
+  cube = new Cube();
+  cube.create();
 }
 
 function main() {
@@ -39,6 +93,22 @@ function main() {
   const gui = new DAT.GUI();
   gui.add(controls, 'tesselations', 0, 8).step(1);
   gui.add(controls, 'Load Scene');
+  var colorGUI = gui.addFolder('Colors');
+  colorGUI.add(controls, 'R', 0, 1).step(0.01);
+  colorGUI.add(controls, 'G', 0, 1).step(0.01);
+  colorGUI.add(controls, 'B', 0, 1).step(0.01);
+  colorGUI.add(controls, 'A', 0, 1).step(0.01);
+  var fragShaderGUI = gui.addFolder('Frag Shaders');
+  fragShaderGUI.add(controls, 'Lambert');
+  fragShaderGUI.add(controls, 'Perlin');
+  fragShaderGUI.add(controls, 'Worley');
+  fragShaderGUI.add(controls, 'Custom');
+  var vertShaderGUI = gui.addFolder('Vert Shaders');
+  vertShaderGUI.add(controls, 'Regular');
+  vertShaderGUI.add(controls, 'Expand');
+  vertShaderGUI.add(controls, 'Collapse');
+  vertShaderGUI.add(controls, 'Distort');
+
 
   // get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -64,6 +134,7 @@ function main() {
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
 
+
   // This function will be called every frame
   function tick() {
     camera.update();
@@ -76,10 +147,22 @@ function main() {
       icosphere = new Icosphere(vec3.fromValues(0, 0, 0), 1, prevTesselations);
       icosphere.create();
     }
-    renderer.render(camera, lambert, [
-      icosphere,
+
+    var newShader = lambert;
+    if (prevFragShader != fragShader || prevVertShader != vertShader)
+    {
+        newShader = new ShaderProgram([
+        new Shader(gl.VERTEX_SHADER, vertShader),
+        new Shader(gl.FRAGMENT_SHADER, fragShader),
+    
+      ]);
+    }
+
+    renderer.render(camera, newShader, [
+      // icosphere,
       // square,
-    ]);
+       cube,
+    ], controls.R, controls.G, controls.B, controls.A );
     stats.end();
 
     // Tell the browser to call `tick` again whenever it renders a new frame

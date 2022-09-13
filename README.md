@@ -1,3 +1,36 @@
+# Leo (Haoquan Liang) - Features and Demo
+## [Live Demo](https://leo-cggt.github.io/hw00-intro-base)
+## GUI
+- GUI allows the user to change the base color of the mesh. It also allows the user to select the frag shader and vert shader being used.   
+<img src="images/ui.png">
+
+## Cube
+<img src="images/cube.gif">   
+
+## Fragment Shaders   
+### Perlin Noise     
+<img src="images/perlin.gif" >
+
+### Worley Noise    
+<img src="images/worley.gif" >
+
+### Custom
+<img src="images/custom.gif" >
+
+## Vertex Shaders   
+### Expand
+<img src="images/expand.gif" >
+
+### Collapse
+<img src="images/collapse.gif" >
+
+### Distort
+<img src="images/distort.gif" >
+
+# Reference
+- random1, random3, WorleyNoise, noise_gen1, noise_gen3, interpNoise3D, and fbm are referenced from the CIS566 and CIS560 course slides
+- expand-vert is referenced from CIS560-hw4
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
