@@ -75,3 +75,4 @@ To check if everything is on the right track:
   - Interfaces https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
   - Types https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
   - Constants https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Constants
+- As recommended, code from https://adrianb.io/2014/08/09/perlinnoise.html was translated to glsl    

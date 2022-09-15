@@ -25,9 +25,11 @@ class ShaderProgram {
   attrNor: number;
   attrCol: number;
 
+
   unifModel: WebGLUniformLocation;
   unifModelInvTr: WebGLUniformLocation;
   unifViewProj: WebGLUniformLocation;
+  unifTime: WebGLUniformLocation;
   unifColor: WebGLUniformLocation;
 
   constructor(shaders: Array<Shader>) {
@@ -44,6 +46,7 @@ class ShaderProgram {
     this.attrPos = gl.getAttribLocation(this.prog, "vs_Pos");
     this.attrNor = gl.getAttribLocation(this.prog, "vs_Nor");
     this.attrCol = gl.getAttribLocation(this.prog, "vs_Col");
+    this.unifTime = gl.getUniformLocation(this.prog, "u_time");
     this.unifModel      = gl.getUniformLocation(this.prog, "u_Model");
     this.unifModelInvTr = gl.getUniformLocation(this.prog, "u_ModelInvTr");
     this.unifViewProj   = gl.getUniformLocation(this.prog, "u_ViewProj");
@@ -81,7 +84,15 @@ class ShaderProgram {
   setGeometryColor(color: vec4) {
     this.use();
     if (this.unifColor !== -1) {
+      console.log('unifcolor', this.unifColor, color);
       gl.uniform4fv(this.unifColor, color);
+    }
+  }
+
+  setTime(time: number){
+    this.use();
+    if (this.unifTime !== -1) {
+      gl.uniform1f(this.unifTime, time);
     }
   }
 
