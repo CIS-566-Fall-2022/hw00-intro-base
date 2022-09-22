@@ -1,18 +1,27 @@
 # HW 0: Intro to Javascript and WebGL
-### Yilin Liu
-[Lieve Demo](https://bigfranklin1.github.io/CIS566-hw00-intro-base/)
+## Yilin Liu
+[Live Demo](https://bigfranklin1.github.io/CIS566-hw00-intro-base/)
+## Objectives Achieved
+1. A color palette to modify the shading color
 
+2. A drop-down menu to switch shaders
+
+3. A cube class that inherits from Drawable
+
+4. A fragment shader that blends 3D perlin noise with shading color
+
+5. A vertex shader that takes trigonometric function to animate the cube's vertices
 ## Screenshots
 
 ### Lambert
-I added a color palette to change the diffuse color.
+Added a color palette in dat.gui to change the diffuse color.
 ![image info](./images/lambert.png)
 ### Perlin Noise
-I implemented a 3D Perlin Noise based on [code](https://www.shadertoy.com/view/ttsBWl) from shadertoy. 
+Implemented a 3D Perlin Noise based on [code](https://www.shadertoy.com/view/ttsBWl) from shadertoy. 
 ![image info](./images/perlin_noise.gif)
 
 ### Custom Vertex Shader
-I added a custom vertex shader that uses a sin function to modify cube's vertices
+Added a custom vertex shader that uses a sin function to modify cube's vertices. The vertices will shrink towards the origin of the world (not its center though) to a center distance and then bounce back to the original positions.
 ![image info](./images/cube_transform.gif)
 
 <p align="center">

@@ -68,12 +68,7 @@ class ShaderProgram {
       gl.uniform4fv(this.unifTime, t);
     }
   }
-  // setColor(c: vec4){
-  //   this.use();
-  //   if(this.unifColor !== -1){
-  //     gl.uniform4fv(this.unifColor, c);
-  //   }
-  // }
+
   setModelMatrix(model: mat4) {
     this.use();
     if (this.unifModel !== -1) {
