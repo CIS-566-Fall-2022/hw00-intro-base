@@ -42,16 +42,31 @@ void main()
     fs_Col = vs_Col;                         // Pass the vertex colors to the fragment shader for interpolation
 
     mat3 invTranspose = mat3(u_ModelInvTr);
-    fs_Nor = normalize(vec4(invTranspose * vec3(vs_Nor), 0));
+    fs_Nor = vec4(invTranspose * vec3(vs_Nor), 0);          // Pass the vertex normals to the fragment shader for interpolation.
+                                                            // Transform the geometry's normals by the inverse transpose of the
+                                                            // model matrix. This is necessary to ensure the normals remain
+                                                            // perpendicular to the surface after the surface is transformed by
+                                                            // the model matrix.
 
     vec4 modelposition = u_Model * vs_Pos;   // Temporarily store the transformed vertex positions for use below
 
+    ////Let's make this vertex go in and out via a tan wave
     vec3 tempPos = vec3(modelposition);
 
+    // u_Time;
 
-    fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
-    gl_Position = u_ViewProj * modelposition;// gl_Position is a built-in variable of OpenGL which is
+    float amplitude = 1.5f;
+    float rate = 0.02f;
+
+    //tempPos += (sin function with amplitude 2) * normal
+    tempPos += amplitude * sin(rate * u_Time) * vec3(normalize(vec4(invTranspose * vec3(vs_Nor), 0)));
+    // amplitude * sin(rate * u_Time);
+
+    // fs_LightVec = lightPos - modelposition;  // Compute the direction in which the light source lies
+    fs_LightVec = lightPos - vec4(tempPos, 1.f);
+
+    gl_Position = u_ViewProj * vec4(tempPos, 1.f);// gl_Position is a built-in variable of OpenGL which is
                                              // used to render the final positions of the geometry's vertices
 
-    fs_Pos = modelposition;
+    fs_Pos = vec4(tempPos, 1.f);
 }

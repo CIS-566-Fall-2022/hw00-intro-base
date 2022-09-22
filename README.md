@@ -1,3 +1,17 @@
+# Submission:
+
+Unfortunately, I've spent the last hour and a half trying to get my 'live-site' to work, but it only showcases the default project, and none of my actual progress : (.
+
+That said, I had a ton of fun with this project, and have a much more confident understanding of Perlin noise, and noise in general. Additionally, picking up typescript was thankfully less gruesome than I was anticipating. Hope I can get the live site to work at some point, but as it is 11:45pm, and I am at my wits end, a regular project submission will have to do for now ¯\_(ツ)_/¯.
+
+Here's a cool screenshot : )!:
+
+![](./screenshot.png)
+
+
+For some extra details, for Q4, I decided to add R,G and B sliders that step by 0.01, that affect the u_color that is passed down to my fragment shader.
+My noise function is a standard perlin noise, and my trig vertex deformation is a sin wave, where I pulse each face of my cube in the direction of each face's normal in a sin pattern!
+
 # HW 0: Intro to Javascript and WebGL
 
 <p align="center">
